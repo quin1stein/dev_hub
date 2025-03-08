@@ -39,7 +39,7 @@ export default function Nav() {
       {/*sign in user*/}
       <section>
         <Link
-          href="/auth"
+          href="/signup"
           className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition"
         >
           Sign In
