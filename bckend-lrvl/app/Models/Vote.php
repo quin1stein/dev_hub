@@ -18,6 +18,9 @@ class Vote extends Model
     public function votable() {
         return $this->morphTo();
     }
+
+
+    // toggle VOTE FUNCTION
     public static function toggleVote($userId, $votable, $type) {
         $existingVote = self::where('user_id', $userId)
             ->where('votable_id', $votable->id)
