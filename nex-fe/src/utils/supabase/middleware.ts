@@ -44,6 +44,3 @@ export async function updateSession(request: NextRequest) {
   // If the user is NOT logged in but visiting "/" or other public routes, allow them
   return supabaseResponse;
 }
-
-//   git config --global user.email "you@example.com"
-  // git config --global user.name "Your Name"
