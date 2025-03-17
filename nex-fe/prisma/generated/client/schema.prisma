@@ -13,9 +13,9 @@ model User {
   name      String
   email     String   @unique
   password  String
-  role      Role
-  posts     Post[] // One user can have many posts
-  votes     Vote[] // One user can vote on many posts and comments
+  role      Role     @default(user)
+  posts     Post[]
+  votes     Vote[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -25,8 +25,8 @@ model Post {
   title     String
   content   String
   userId    Int
-  user      User      @relation(fields: [userId], references: [id]) // One post belongs to one user
-  votes     Vote[] // Many votes for each post
+  user      User      @relation(fields: [userId], references: [id])
+  votes     Vote[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   comments  Comment[]
@@ -36,8 +36,8 @@ model Comment {
   id        Int      @id @default(autoincrement())
   content   String
   postId    Int
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade) // One comment belongs to one post
-  votes     Vote[] // Many votes for each comment
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  votes     Vote[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -51,13 +51,11 @@ model Vote {
   voteType  VoteType
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
 
-  // One vote can only be for either a post or a comment, but not both
-  post    Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
-  comment Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, postId]) // Ensures unique vote per user for a post
-  @@unique([userId, commentId]) // Ensures unique vote per user for a comment
+  @@unique([userId, postId])
+  @@unique([userId, commentId])
 }
 
 enum VoteType {

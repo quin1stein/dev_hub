@@ -6372,7 +6372,7 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    role: $Enums.Role
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostCreateNestedManyWithoutUserInput
@@ -6384,7 +6384,7 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    role: $Enums.Role
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
@@ -6419,7 +6419,7 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    role: $Enums.Role
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7593,7 +7593,7 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    role: $Enums.Role
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     votes?: VoteCreateNestedManyWithoutUserInput
@@ -7604,7 +7604,7 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    role: $Enums.Role
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     votes?: VoteUncheckedCreateNestedManyWithoutUserInput
@@ -7843,7 +7843,7 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    role: $Enums.Role
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostCreateNestedManyWithoutUserInput
@@ -7854,7 +7854,7 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    role: $Enums.Role
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostUncheckedCreateNestedManyWithoutUserInput

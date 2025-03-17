@@ -1,40 +1,45 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { SignupFormData } from "@/types/types";
-import { signUp } from "../actions";
+import { login } from "../actions";
 
-export default function Page() {
+export const Page = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<SignupFormData>();
 
-  const onSubmit = async (data: SignupFormData) => {
+  async function logIn(data: SignupFormData) {
     const formData = new FormData();
+
     formData.append("email", data.email);
     formData.append("password", data.password);
 
-    await signUp(formData); // Calls the Supabase sign-up function
-  };
-
+    try {
+      await login(formData);
+    } catch (e: any) {
+      console.error("An error has occured", e.message);
+    }
+  }
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input
-        {...register("email", { required: "Email is required" })}
-        type="email"
-        placeholder="Email"
-      />
-      {errors.email && <p>{errors.email.message}</p>}
-
-      <input
-        {...register("password", { required: "Password is required" })}
-        type="password"
-        placeholder="Password"
-      />
-      {errors.password && <p>{errors.password.message}</p>}
-
-      <button type="submit">Sign Up</button>
-    </form>
+    <>
+      <form onSubmit={handleSubmit(logIn)}>
+        <input
+          type="text"
+          {...register("email", { required: "Field required!" })}
+        />
+        <input
+          type="text"
+          {...register("password", {
+            required: "Field Required!",
+            pattern: {
+              value: /^[^@ ]+@[^@ ]+\.[^@ ]+$/,
+              message: "Invalid email address",
+            },
+          })}
+        />
+      </form>
+    </>
   );
-}
+};
