@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role
+  posts     Post[] // One user can have many posts
+  votes     Vote[] // One user can vote on many posts and comments
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Post {
+  id        Int       @id @default(autoincrement())
+  title     String
+  content   String
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id]) // One post belongs to one user
+  votes     Vote[] // Many votes for each post
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  comments  Comment[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  postId    Int
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade) // One comment belongs to one post
+  votes     Vote[] // Many votes for each comment
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Vote {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  postId    Int?
+  commentId Int?
+  voteType  VoteType
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // One vote can only be for either a post or a comment, but not both
+  post    Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  comment Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId]) // Ensures unique vote per user for a post
+  @@unique([userId, commentId]) // Ensures unique vote per user for a comment
+}
+
+enum VoteType {
+  upvote
+  downvote
+}
+
+enum Role {
+  user
+  admin
+}
