@@ -12,7 +12,7 @@ const Hero = () => {
           A web application for developers to collaborate and discuss projects.
         </h4>
         <Link
-          href="/login"
+          href="/signup"
           className="transition-all duration-300 w-[8em] h-[3em] flex items-center justify-center rounded-md border border-black hover:bg-black hover:text-white bg-white text-black font-medium"
         >
           Join Us

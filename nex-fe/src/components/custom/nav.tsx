@@ -1,9 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Nav() {
+export default function Nav({ position = "static" }: { position?: string }) {
   return (
-    <nav className="flex justify-between items-center px-6 py-4 shadow-md bg-white">
+    <nav
+      className={`w-full flex justify-between items-center px-6 py-4 shadow-md bg-white ${position}`}
+    >
       <section className="flex items-center space-x-3">
         <Image
           src="/brain-cog.png"
@@ -15,20 +17,14 @@ export default function Nav() {
         <h3 className="font-bold text-xl">DevHub</h3>
       </section>
 
-      {/*middle section */}
+      {/* Middle section */}
       <section>
         <ul className="flex space-x-6 font-medium">
           <li>
             <Link href="/">Home</Link>
           </li>
           <li>
-            <Link href="/explore">Explore</Link>
-          </li>
-          <li>
             <Link href="/create">Create Post</Link>
-          </li>
-          <li>
-            <Link href="/messages">Messages</Link>
           </li>
           <li>
             <Link href="/profile">Profile</Link>
@@ -36,7 +32,7 @@ export default function Nav() {
         </ul>
       </section>
 
-      {/*sign in user*/}
+      {/* Sign in button */}
       <section>
         <Link
           href="/signup"

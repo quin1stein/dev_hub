@@ -15,7 +15,9 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value));
+          cookiesToSet.forEach(({ name, value, options }) =>
+            request.cookies.set(name, value)
+          );
           supabaseResponse = NextResponse.next({
             request,
           });
@@ -31,24 +33,22 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // public routes
-  const publicRoutes = ["/", "/login", "/signup", "/about"];
-  // protected Routes
-  const protectedRoutes = ["/home"]
+  const publicRoutes = ["/"];
+  const protectedRoutes = ["/home", "/profile", "/posts"];
 
   const path = request.nextUrl.pathname;
-  
-  const isProtectedRoute = protectedRoutes.some((route) => path.startsWith(route))
-  const isPublicRoute = publicRoutes.includes(path)
 
-  //unauthenticated user trying to access protected route, redirect to login route
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    path.startsWith(route)
+  );
+  const isPublicRoute = publicRoutes.includes(path);
+
   if (!user && isProtectedRoute) {
-    return NextResponse.redirect(new URL("/login", request.url))
-  }
-//authenticated user accessing public route will be redirected into home route
-  if (user && isPublicRoute) {
-    return NextResponse.redirect(new URL("/home", request.url))
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  return supabaseResponse
+  if (user && isPublicRoute) {
+    return NextResponse.redirect(new URL("/home", request.url));
+  }
+  return supabaseResponse;
 }

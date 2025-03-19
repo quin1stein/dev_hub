@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import QueryProvider from "./Tanstack";
 import "./globals.css";
-
+import { ThemeProvider } from "@/components/ui/theme-provider";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -15,10 +15,12 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "DevHub",
-  authors: [{
-    name: "Quin Suedad",
-    url: "https://github.com/quin1stein"
-  }]
+  authors: [
+    {
+      name: "Quin Suedad",
+      url: "https://github.com/quin1stein",
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -27,12 +29,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <QueryProvider>
-        {children}
+          <ThemeProvider>{children}</ThemeProvider>
         </QueryProvider>
       </body>
     </html>

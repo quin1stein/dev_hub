@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { SignupFormData } from "@/types/types";
 import { login } from "../actions";
 
-export const Page = () => {
+export default function Page() {
   const {
     register,
     handleSubmit,
@@ -42,4 +42,4 @@ export const Page = () => {
       </form>
     </>
   );
-};
+}
