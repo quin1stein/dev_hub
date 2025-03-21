@@ -33,7 +33,13 @@ export default function Nav({ position = "static" }: { position?: string }) {
       </section>
 
       {/* Sign in button */}
-      <section>
+      <section className="space-x-1">
+        <Link
+          href="/login"
+          className="px-4 py-2 rounded-lg border-2 border-black transition"
+        >
+          Log In
+        </Link>
         <Link
           href="/signup"
           className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition"

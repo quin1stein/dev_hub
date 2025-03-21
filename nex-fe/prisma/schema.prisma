@@ -9,10 +9,9 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id
   name      String
   email     String   @unique
-  password  String
   role      Role     @default(user)
   posts     Post[]
   votes     Vote[]
@@ -21,15 +20,24 @@ model User {
 }
 
 model Post {
-  id        Int       @id @default(autoincrement())
-  title     String
-  content   String
-  userId    Int
-  user      User      @relation(fields: [userId], references: [id])
-  votes     Vote[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  comments  Comment[]
+  id         Int          @id @default(autoincrement())
+  title      String
+  content    String
+  userId     String
+  user       User         @relation(fields: [userId], references: [id])
+  votes      Vote[]
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  focusAreas FocusAreas[] @relation("PostFocusArea")
+  comments   Comment[]
+}
+
+// Focus areas means **flairs** or **categories** of the post.
+model FocusAreas {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  label String @unique
+  posts Post[] @relation("PostFocusArea")
 }
 
 model Comment {
@@ -44,7 +52,7 @@ model Comment {
 
 model Vote {
   id        Int      @id @default(autoincrement())
-  userId    Int
+  userId    String
   user      User     @relation(fields: [userId], references: [id])
   postId    Int?
   commentId Int?

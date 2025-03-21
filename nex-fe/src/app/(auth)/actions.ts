@@ -6,24 +6,46 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { prisma } from "@/utils/prisma";
 
+// Login function
 export async function login(formData: FormData) {
   const supabase = await createClient();
 
-  const data = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
-  };
+  const email = (formData.get("email") as string).trim();
+  const password = (formData.get("password") as string).trim();
 
-  const { error } = await supabase.auth.signInWithPassword(data);
+  // Check if user exists in Prisma
+  const user = await prisma.user.findUnique({
+    where: { email },
+  });
 
-  if (error) {
-    redirect("/error");
+  if (!user) {
+    return {
+      status: "User does not exist",
+      success: false,
+    };
+  }
+
+  const { error, data: supabaseData } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error || !supabaseData.session) {
+    return {
+      status: error?.message || "Failed to Log In",
+      success: false,
+    };
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+  return {
+    status: "Login successful!",
+    success: true,
+    redirect: "/home",
+  };
 }
 
+// Signup function
 export async function signUp(formData: FormData) {
   const supabase = await createClient();
 
@@ -32,25 +54,39 @@ export async function signUp(formData: FormData) {
     password: formData.get("password") as string,
   };
 
-  const { error } = await supabase.auth.signUp(data);
+  // Check if user already exists in Prisma
+  const existingUser = await prisma.user.findUnique({
+    where: { email: data.email },
+  });
 
-  if (error) {
-    redirect("/error");
-    return;
+  if (existingUser) {
+    return { status: "User already exists!", success: false };
+  }
+
+  // Sign up the user in Supabase
+  const { data: supabaseUser, error } = await supabase.auth.signUp(data);
+
+  if (error || !supabaseUser?.user) {
+    return { status: "Failed to sign up!", success: false };
   }
 
   try {
+    // Store Supabase UID in Prisma
     await prisma.user.create({
       data: {
+        id: supabaseUser.user.id, // Store the Supabase UID
         email: data.email,
-        password: data.password,
         name: formData.get("name") as string,
       },
     });
+
+    return {
+      status:
+        "Account created successfully! Check your Gmail to verify your email.",
+      success: true,
+    };
   } catch (err) {
     console.error("Prisma user creation error:", err);
-    redirect("/error");
+    return { status: "Failed to save user to database!", success: false };
   }
-  revalidatePath("/", "layout");
-  redirect("/");
 }

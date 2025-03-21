@@ -33,22 +33,22 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const publicRoutes = ["/"];
-  const protectedRoutes = ["/home", "/profile", "/posts"];
+  // const publicRoutes = ["/", "/about", "/contact"];
+  // const protectedRoutes = ["/home", "/profile", "/posts", "/create"];
 
-  const path = request.nextUrl.pathname;
+  // const path = request.nextUrl.pathname;
 
-  const isProtectedRoute = protectedRoutes.some((route) =>
-    path.startsWith(route)
-  );
-  const isPublicRoute = publicRoutes.includes(path);
+  // const isProtectedRoute = protectedRoutes.some((route) =>
+  //   path.startsWith(route)
+  // );
+  // const isPublicRoute = publicRoutes.includes(path);
 
-  if (!user && isProtectedRoute) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
+  // if (!user && isProtectedRoute) {
+  //   return NextResponse.redirect(new URL("/login", request.url));
+  // }
 
-  if (user && isPublicRoute) {
-    return NextResponse.redirect(new URL("/home", request.url));
-  }
+  // if (user && isPublicRoute) {
+  //   return NextResponse.redirect(new URL("/home", request.url));
+  // }
   return supabaseResponse;
 }

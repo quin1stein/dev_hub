@@ -15,17 +15,27 @@ export default function Page() {
 
   const [serverError, setServerError] = useState<string | null>(null);
   const [inputType, setInputType] = useState<boolean>(false);
+  const [statusMessage, setStatusMessage] = useState<string>("");
 
   async function onSubmit(data: SignupFormData) {
-    setServerError(null); // Reset any previous errors
-
+    setServerError(null);
+    setStatusMessage("");
     const formData = new FormData();
     formData.append("email", data.email);
     formData.append("password", data.password);
     formData.append("name", data.name);
 
     try {
-      await signUp(formData);
+      // get the status of the account creation
+      const fe = await signUp(formData);
+
+      if (fe.success) {
+        setStatusMessage(fe.status);
+      } else {
+        setStatusMessage(
+          `Failed to create account! ${fe.status && "Status: Failed"}`
+        );
+      }
     } catch (error: any) {
       setServerError(error.message || "Something went wrong");
     }
