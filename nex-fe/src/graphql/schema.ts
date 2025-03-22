@@ -1,13 +1,21 @@
-export const typeDefs = `#graphql
+import { gql } from "graphql-tag";
+
+export const typeDefs = gql`
+  type FocusArea {
+    id: ID!
+    name: String!
+    label: String!
+  }
+
   type Post {
     id: ID!
     title: String!
     content: String!
+    slug: String!
     focusAreas: [FocusArea!]!
   }
 
-  type FocusArea {
-    id: ID!
+  input FocusAreaInput {
     name: String!
     label: String!
   }
@@ -17,6 +25,10 @@ export const typeDefs = `#graphql
   }
 
   type Mutation {
-    createPost(title: String!, content: String!, focusAreas: [String!]!): Post!
+    createPost(
+      title: String!
+      content: String!
+      focusAreas: [FocusAreaInput!]!
+    ): Post!
   }
 `;
