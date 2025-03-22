@@ -14,15 +14,22 @@ export default function Page() {
   } = useForm<SignupFormData>();
 
   const [inputType, setInputType] = useState<boolean>(false);
-
+  const [messageStatus, setMessageStatus] = useState<string>("");
   async function logIn(data: SignupFormData) {
+    setMessageStatus("");
     const formData = new FormData();
 
     formData.append("email", data.email);
     formData.append("password", data.password);
 
     try {
-      await login(formData);
+      const response = await login(formData);
+
+      if (!response.success) {
+        setMessageStatus(response.status);
+      } else {
+        setMessageStatus(response.status);
+      }
     } catch (e: any) {
       console.error("An error has occurred", e.message);
     }
@@ -91,6 +98,7 @@ export default function Page() {
                 {inputType ? "Show" : "Hide"}
               </button>
             </div>
+            {messageStatus && <p className="font-bold mt-1">{messageStatus}</p>}
             {errors.password && (
               <p className="text-red-600 text-sm mt-1">
                 {errors.password.message}
@@ -108,6 +116,10 @@ export default function Page() {
           </button>
         </form>
       </main>
+      <p className="text-center">
+        Note: You cannot log-in if the email you used to sign-in is not
+        verified.
+      </p>
       <Footer />
     </>
   );

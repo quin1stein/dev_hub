@@ -32,9 +32,7 @@ export default function Page() {
       if (fe.success) {
         setStatusMessage(fe.status);
       } else {
-        setStatusMessage(
-          `Failed to create account! ${fe.status && "Status: Failed"}`
-        );
+        setStatusMessage(fe.status);
       }
     } catch (error: any) {
       setServerError(error.message || "Something went wrong");
@@ -119,15 +117,38 @@ export default function Page() {
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-2 text-sm"
+                  className="absolute inset-y-0 right-1 text-sm rounded-md"
                   onClick={() => setInputType(!inputType)}
                 >
-                  {inputType ? "Hide" : "Show"}
+                  {inputType ? "Hide Password" : "Show Password"}
                 </button>
               </div>
+
               {errors.password && (
                 <p className="text-red-500 text-sm">
                   {errors.password.message}
+                </p>
+              )}
+            </div>
+            {/* re enter password and validate if it matched */}
+            <div>
+              <label htmlFor="confirmPassword">Re-Enter Password</label>
+              <div className="relative">
+                <input
+                  type={inputType ? "text" : "password"}
+                  id="confirmPassword"
+                  className="w-full border p-2 rounded-md"
+                  {...register("confirmPassword", {
+                    required: "Password is required",
+                    validate: (value, { password }) =>
+                      value === password || "Passwords do not match",
+                  })}
+                />
+              </div>
+
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-sm">
+                  {errors.confirmPassword.message}
                 </p>
               )}
             </div>
@@ -142,6 +163,7 @@ export default function Page() {
             </button>
 
             {/* Server Error */}
+            {statusMessage && <p className="font-bold mt-1">{statusMessage}</p>}
             {serverError && (
               <p className="text-red-500 text-sm">{serverError}</p>
             )}

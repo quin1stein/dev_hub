@@ -1,8 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-
 import { createClient } from "@/utils/supabase/server";
 import { prisma } from "@/utils/prisma";
 
@@ -29,7 +27,6 @@ export async function login(formData: FormData) {
     email,
     password,
   });
-
   if (error || !supabaseData.session) {
     return {
       status: error?.message || "Failed to Log In",
@@ -67,7 +64,7 @@ export async function signUp(formData: FormData) {
   const { data: supabaseUser, error } = await supabase.auth.signUp(data);
 
   if (error || !supabaseUser?.user) {
-    return { status: "Failed to sign up!", success: false };
+    return { status: "Failed to sign-in!", success: false };
   }
 
   try {

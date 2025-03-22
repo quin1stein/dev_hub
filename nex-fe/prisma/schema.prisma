@@ -20,20 +20,21 @@ model User {
 }
 
 model Post {
-  id         Int          @id @default(autoincrement())
+  id         Int         @id @default(autoincrement())
+  slug       String      @unique
   title      String
   content    String
   userId     String
-  user       User         @relation(fields: [userId], references: [id])
+  user       User        @relation(fields: [userId], references: [id])
   votes      Vote[]
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  focusAreas FocusAreas[] @relation("PostFocusArea")
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  focusAreas FocusArea[] @relation("PostFocusArea")
   comments   Comment[]
 }
 
 // Focus areas means **flairs** or **categories** of the post.
-model FocusAreas {
+model FocusArea {
   id    Int    @id @default(autoincrement())
   name  String @unique
   label String @unique
@@ -62,6 +63,7 @@ model Vote {
   post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
   comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
 
+  // unique constraints defines that user must only have a single vote in post and comment
   @@unique([userId, postId])
   @@unique([userId, commentId])
 }

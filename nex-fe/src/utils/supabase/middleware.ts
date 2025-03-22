@@ -1,5 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
-import { NextResponse, type NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -33,22 +33,22 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // const publicRoutes = ["/", "/about", "/contact"];
-  // const protectedRoutes = ["/home", "/profile", "/posts", "/create"];
+  const publicRoutes = ["/", "/about"];
+  const protectedRoutes = ["/home", "/create", "/find"];
 
-  // const path = request.nextUrl.pathname;
+  const path = request.nextUrl.pathname;
 
-  // const isProtectedRoute = protectedRoutes.some((route) =>
-  //   path.startsWith(route)
-  // );
-  // const isPublicRoute = publicRoutes.includes(path);
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    route.startsWith(path)
+  );
+  const isPublicRoute = publicRoutes.includes(path);
 
-  // if (!user && isProtectedRoute) {
-  //   return NextResponse.redirect(new URL("/login", request.url));
-  // }
+  if (!user && isProtectedRoute) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+  if (user && isPublicRoute) {
+    return NextResponse.redirect(new URL("/home", request.url));
+  }
 
-  // if (user && isPublicRoute) {
-  //   return NextResponse.redirect(new URL("/home", request.url));
-  // }
   return supabaseResponse;
 }

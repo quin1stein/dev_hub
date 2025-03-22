@@ -2,10 +2,11 @@ export interface SignupFormData {
   name: string;
   email: string;
   password: string;
+  confirmPassword: string;
 }
 
 export interface FocusAreaOption {
-  value: string;
+  name: string;
   label: string;
 }
 

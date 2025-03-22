@@ -2,12 +2,13 @@
 import { useForm, Controller } from "react-hook-form";
 import Select from "react-select";
 import { FormData } from "@/types/types";
+import { useMutation } from "@tanstack/react-query";
 
 const focusAreaOptions = [
-  { value: "AI", label: "AI" },
-  { value: "Web Development", label: "Web Development" },
-  { value: "Mobile Development", label: "Mobile Development" },
-  { value: "Data Science", label: "Data Science" },
+  { name: "AI", label: "AI" },
+  { name: "Web Development", label: "Web Development" },
+  { name: "Mobile Development", label: "Mobile Development" },
+  { name: "Data Science", label: "Data Science" },
 ];
 
 export default function FormsPost() {
@@ -18,7 +19,32 @@ export default function FormsPost() {
     formState: { errors, isSubmitting },
   } = useForm<FormData>();
 
-  async function onSubmit(data: FormData) {}
+  // use mutation fn to send data to server
+  const mutation = useMutation({
+    mutationFn: async (data: FormData) => {
+      const response = await fetch("/api/posts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create a post");
+      }
+
+      return response.json();
+    },
+    onSuccess: (data) => {
+      console.log("Post created successfully", data);
+    },
+    onError: (err) => {
+      console.error("Error creating the post", err);
+    },
+  });
+
+  async function onSubmit(data: FormData) {
+    mutation.mutate(data);
+  }
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -80,6 +106,7 @@ export default function FormsPost() {
       </p>
       <button
         type="submit"
+        disabled={isSubmitting ? true : false}
         className="border-2 px-4 py-2 rounded-md cursor-pointer"
       >
         Post
