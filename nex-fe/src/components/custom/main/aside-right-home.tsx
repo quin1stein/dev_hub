@@ -1,8 +1,6 @@
 import Image from "next/image";
-import { format } from "date-fns";
 import Link from "next/link";
 export const AsideRightHome = () => {
-  let currentYear = format(new Date(), "yyyy");
   return (
     <aside className="mr-8 p-4 h-[80vh] w-[20vw] border-2 rounded-md flex flex-col justify-between">
       <section>
@@ -62,7 +60,7 @@ export const AsideRightHome = () => {
         </Link>
         <p className="hover:underline">
           {" "}
-          &copy; DevHub {currentYear} All Rights Reserved.
+          &copy; DevHub 2025 All Rights Reserved.
         </p>
       </footer>
     </aside>

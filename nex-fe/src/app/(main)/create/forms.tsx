@@ -3,7 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import Select from "react-select";
 import { FormData } from "@/types/types";
 import { useMutation } from "@tanstack/react-query";
-
+import { toast } from "sonner";
 const focusAreaOptions = [
   { name: "AI", label: "AI" },
   { name: "Web Development", label: "Web Development" },
@@ -22,23 +22,66 @@ export default function FormsPost() {
   // use mutation fn to send data to server
   const mutation = useMutation({
     mutationFn: async (data: FormData) => {
-      const response = await fetch("/api/posts", {
+      const response = await fetch("/api/graphql/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          query: `
+            mutation CreatePost($title: String!, $content: String!, $focusAreas: [FocusAreaInput!]!) {
+              createPost(title: $title, content: $content, focusAreas: $focusAreas) {
+                title
+                content
+                focusAreas {
+                  name
+                  label
+                }
+              }
+            }
+          `,
+          variables: {
+            title: data.title,
+            content: data.content,
+            focusAreas: data.focusAreas.map((focus) => ({
+              name: focus.name,
+              label: focus.label,
+            })),
+          },
+        }),
       });
 
       if (!response.ok) {
+        console.error("Network error:", response.statusText);
         throw new Error("Failed to create a post");
       }
 
-      return response.json();
+      const result = await response.json();
+
+      if (result.errors) {
+        console.error("GraphQL error:", result.errors);
+        throw new Error(result.errors[0].message);
+      }
+
+      return result.data.createPost;
     },
     onSuccess: (data) => {
-      console.log("Post created successfully", data);
+      toast("Post successfully created.", {
+        description: "Test",
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
+      console.log("Post created successfully:", data);
     },
     onError: (err) => {
-      console.error("Error creating the post", err);
+      toast("Post Failed to Create.", {
+        description: "Test",
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
+      console.error("Error creating the post:", err.message);
     },
   });
 
@@ -109,7 +152,7 @@ export default function FormsPost() {
         disabled={isSubmitting ? true : false}
         className="border-2 px-4 py-2 rounded-md cursor-pointer"
       >
-        Post
+        {isSubmitting ? "Posting" : "Post"}
       </button>
     </form>
   );

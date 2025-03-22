@@ -1,3 +1,4 @@
+"use client";
 import AsideHome from "@/components/custom/main/aside-home";
 import { NavHome } from "@/components/custom/main/nav-home";
 import Rules from "./rules";
