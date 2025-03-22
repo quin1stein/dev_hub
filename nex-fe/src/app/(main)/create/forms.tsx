@@ -58,12 +58,11 @@ export default function FormsPost() {
 
       if (result.errors) {
         console.error("GraphQL error:", result.errors);
-        throw new Error(result.errors[0].message);
       }
 
       return result.data.createPost;
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast("Post successfully created.", {
         description: "Test",
         action: {
@@ -71,7 +70,6 @@ export default function FormsPost() {
           onClick: () => console.log("Undo"),
         },
       });
-      console.log("Post created successfully:", data);
     },
     onError: (err) => {
       toast("Post Failed to Create.", {

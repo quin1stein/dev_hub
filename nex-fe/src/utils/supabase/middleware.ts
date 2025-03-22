@@ -39,14 +39,14 @@ export async function updateSession(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   const isProtectedRoute = protectedRoutes.some((route) =>
-    route.startsWith(path)
+    path.startsWith(route)
   );
   const isPublicRoute = publicRoutes.includes(path);
 
-  if (!user && isProtectedRoute) {
+  if (user && isProtectedRoute) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
-  if (user && isPublicRoute) {
+  if (!user && isPublicRoute) {
     return NextResponse.redirect(new URL("/home", request.url));
   }
 

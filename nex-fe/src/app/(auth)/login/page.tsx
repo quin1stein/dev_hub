@@ -5,8 +5,9 @@ import { login } from "../actions";
 import Nav from "@/components/custom/nav";
 import Footer from "@/components/custom/footer";
 import { useState } from "react";
-
+import { useRouter } from "next/navigation";
 export default function Page() {
+  const route = useRouter();
   const {
     register,
     handleSubmit,
@@ -29,6 +30,7 @@ export default function Page() {
         setMessageStatus(response.status);
       } else {
         setMessageStatus(response.status);
+        route.push("/home");
       }
     } catch (e: any) {
       console.error("An error has occurred", e.message);

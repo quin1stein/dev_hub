@@ -4,6 +4,41 @@ import slugify from "slugify";
 import { FocusAreaOption } from "@/types/types";
 
 export const resolvers = {
+  Query: {
+    getPosts: async () => {
+      const supabase = await createClient();
+      const { data, error } = await supabase.auth.getUser();
+
+      if (!data.user || error) {
+        throw new Error("Must be authenticated");
+      }
+      try {
+        const getPosts = await prisma.post.findMany({
+          select: {
+            id: true,
+            title: true,
+            slug: true,
+            content: true,
+            user: {
+              select: {
+                name: true,
+              },
+            },
+            focusAreas: {
+              select: {
+                name: true,
+                label: true,
+              },
+            },
+          },
+        });
+
+        return getPosts;
+      } catch (err: unknown) {
+        console.error("An error has occured: " + err);
+      }
+    },
+  },
   Mutation: {
     createPost: async (
       _: unknown,
