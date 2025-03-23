@@ -1,14 +1,15 @@
 "use client";
 import { useForm, Controller } from "react-hook-form";
 import Select from "react-select";
-import { FormData } from "@/types/types";
+import { FormData } from "@/lib/types/types";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-const focusAreaOptions = [
+const focusAreaOptions: { name: string; label: string }[] = [
   { name: "AI", label: "AI" },
   { name: "Web Development", label: "Web Development" },
   { name: "Mobile Development", label: "Mobile Development" },
   { name: "Data Science", label: "Data Science" },
+  { name: "Conversation", label: "Conversation" },
 ];
 
 export default function FormsPost() {
@@ -135,7 +136,7 @@ export default function FormsPost() {
         render={({ field }) => (
           <Select
             {...field}
-            isMulti
+            isMulti={true}
             options={focusAreaOptions}
             className="my-2 "
             placeholder="Select Focus Areas"

@@ -1,8 +1,9 @@
 "use client";
 import Image from "next/image";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
-import { Posts } from "@/types/types";
+import { Posts } from "@/lib/types/types";
 import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
 
 export const HeroHome = () => {
   const {
@@ -56,31 +57,34 @@ export const HeroHome = () => {
     <main className="flex-grow h-[90vh] p-4">
       <section className="h-full overflow-y-auto space-y-4">
         {posts ? (
-          posts?.map((post, index) => (
-            <article
-              key={index}
-              className="flex items-start p-4 border-2 rounded-lg gap-4"
-            >
-              <Image
-                src="/rawprofile.svg"
-                alt="Profile Image"
-                width={50}
-                height={50}
-                className="rounded-full"
-              />
-              <div className="flex-grow">
-                <h2 className="font-semibold">{post.user.name}</h2>
-                <p className="text-lg">{post.title}</p>
-                <p>{post.content}</p>
-                <div className="flex items-center justify-start gap-2 mt-2">
-                  <FaArrowUp className="cursor-pointer hover:text-green-500" />
-                  <span>12</span>
-                  <FaArrowDown className="cursor-pointer hover:text-red-500" />
-                  <span>14</span>
+          posts?.map((post, index) => {
+            return (
+              <Link
+                href={`/home/${post.slug}`}
+                key={index}
+                className="flex items-start p-4 border-2 rounded-lg gap-4"
+              >
+                <Image
+                  src="/rawprofile.svg"
+                  alt="Profile Image"
+                  width={50}
+                  height={50}
+                  className="rounded-full"
+                />
+                <div className="flex-grow">
+                  <h2 className="font-semibold">{post.user.name}</h2>
+                  <p className="text-lg">{post.title}</p>
+                  <p>{post.content}</p>
+                  <div className="flex items-center justify-start gap-2 mt-2">
+                    <FaArrowUp className="cursor-pointer hover:text-green-500" />
+                    <span>12</span>
+                    <FaArrowDown className="cursor-pointer hover:text-red-500" />
+                    <span>14</span>
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))
+              </Link>
+            );
+          })
         ) : (
           <p>No posts</p>
         )}

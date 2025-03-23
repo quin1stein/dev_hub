@@ -1,7 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { prisma } from "@/utils/prisma";
 import slugify from "slugify";
-import { FocusAreaOption } from "@/types/types";
+import { FocusAreaOption } from "@/lib/types/types";
 
 export const resolvers = {
   Query: {
@@ -37,7 +37,46 @@ export const resolvers = {
       } catch (err: unknown) {
         console.error("An error has occured: " + err);
       }
-    },
+    }, //get Posts[]
+    getSpecificPost: async (_: unknown, args: { slug: string }) => {
+      const supabase = await createClient();
+      const { data, error } = await supabase.auth.getUser();
+      if (!data.user || error) {
+        throw new Error("Not authenticated.");
+      }
+
+      try {
+        const getSpecificPost = await prisma.post.findUnique({
+          where: { slug: args.slug },
+          select: {
+            id: true,
+            title: true,
+            content: true,
+            slug: true,
+            focusAreas: {
+              select: {
+                name: true,
+                label: true,
+              },
+            },
+            user: {
+              select: {
+                name: true,
+                role: true,
+              },
+            },
+          },
+        });
+
+        if (!getSpecificPost) {
+          return null;
+        }
+
+        return getSpecificPost;
+      } catch (err: unknown) {
+        console.error("An error has occured: " + err);
+      }
+    }, // get a specific post through slug
   },
   Mutation: {
     createPost: async (

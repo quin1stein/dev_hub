@@ -40,9 +40,14 @@ export const typeDefs = gql`
     label: String!
   }
 
+  type PaginatedPost {
+    posts: [Post!]!
+    nextCursor: String
+    hasNextPage: Boolean
+  }
   type Query {
     getPosts: [Post!]! # used to fetch all posts
-    getPost(slug: String!): Post! # used to fetch a specfic post through slug
+    getSpecificPost(slug: String!): Post!
     getUserInfo: User! # used to fetch logged-in user's data
   }
 

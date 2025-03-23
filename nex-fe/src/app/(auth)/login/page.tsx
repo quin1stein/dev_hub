@@ -1,6 +1,6 @@
 "use client";
 import { useForm } from "react-hook-form";
-import { SignupFormData } from "@/types/types";
+import { SignupFormData } from "@/lib/types/types";
 import { login } from "../actions";
 import Nav from "@/components/custom/nav";
 import Footer from "@/components/custom/footer";

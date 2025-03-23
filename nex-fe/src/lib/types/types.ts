@@ -24,6 +24,7 @@ export interface FormData {
 // User type, assuming minimal details
 export type User = {
   id: string;
+  role: string;
   name: string;
   email: string;
   posts?: Posts[]; // A user can have multiple posts
@@ -42,7 +43,7 @@ export type Comment = {
 export type Vote = {
   id: string;
   user: User;
-  value: number; // Could be 1 for upvote, -1 for downvote
+  value: 1 | -1; // Could be 1 for upvote, -1 for downvote
 };
 
 // Post type with associations to User, Comments, and FocusAreas
@@ -54,4 +55,10 @@ export type Posts = {
   focusAreas: FocusAreaOption[];
   user: User;
   comments: Comment[];
+  votes: Vote[];
+};
+
+export type PaginatedPost = {
+  posts: Posts[];
+  nextCursor: string | null;
 };
