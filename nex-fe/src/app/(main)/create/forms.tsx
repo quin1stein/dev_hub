@@ -136,18 +136,21 @@ export default function FormsPost() {
         render={({ field }) => (
           <Select
             {...field}
-            isMulti={true}
+            isMulti
             options={focusAreaOptions}
-            className="my-2 "
+            className="my-2"
             placeholder="Select Focus Areas"
+            getOptionValue={(option) => option.name}
+            getOptionLabel={(option) => option.label}
           />
         )}
       />
+
       <p className="font-bold text-red-500">
         {errors.focusAreas && errors.focusAreas.message}
       </p>
       <button
-        type="submit"
+        type={isSubmitting ? "button" : "submit"}
         disabled={isSubmitting ? true : false}
         className="border-2 px-4 py-2 rounded-md cursor-pointer"
       >

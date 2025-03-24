@@ -46,9 +46,9 @@ export const typeDefs = gql`
     hasNextPage: Boolean
   }
   type Query {
-    getPosts: [Post!]! # used to fetch all posts
+    getPosts: [Post!]!
     getSpecificPost(slug: String!): Post!
-    getUserInfo: User! # used to fetch logged-in user's data
+    getUserInfo: User!
   }
 
   type Mutation {
@@ -56,6 +56,6 @@ export const typeDefs = gql`
       title: String!
       content: String!
       focusAreas: [FocusAreaInput!]!
-    ): Post! # used to create post in /create route
+    ): Post!
   }
 `;
