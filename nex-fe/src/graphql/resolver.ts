@@ -2,6 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { prisma } from "@/utils/prisma";
 import slugify from "slugify";
 import { FocusAreaOption } from "@/lib/types/types";
+import { redirect } from "next/navigation";
 
 export const resolvers = {
   Query: {
@@ -77,6 +78,36 @@ export const resolvers = {
         console.error("An error has occured: " + err);
       }
     }, // get a specific post through slug
+    getUserInfo: async () => {
+      const supabase = await createClient();
+      const { data, error } = await supabase.auth.getUser();
+
+      if (!data || error) {
+        throw new Error("User not authenticated");
+      }
+
+      try {
+        const getUserProfile = await prisma.user.findUnique({
+          where: {
+            id: data.user.id,
+          },
+          select: {
+            name: true,
+            email: true,
+            createdAt: true,
+            role: true,
+            updatedAt: true,
+          },
+        });
+        if (!getUserProfile) {
+          redirect("/login");
+        }
+
+        return getUserProfile;
+      } catch (err: unknown) {
+        console.error("An error has occured: " + err);
+      }
+    },
   },
   Mutation: {
     createPost: async (

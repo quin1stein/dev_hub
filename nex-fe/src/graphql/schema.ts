@@ -34,6 +34,8 @@ export const typeDefs = gql`
     email: String!
     role: UserRole!
     posts: [Post!]!
+    createdAt: String!
+    updatedAt: String!
   }
   input FocusAreaInput {
     name: String!
@@ -45,6 +47,7 @@ export const typeDefs = gql`
     nextCursor: String
     hasNextPage: Boolean
   }
+
   type Query {
     getPosts: [Post!]!
     getSpecificPost(slug: String!): Post!

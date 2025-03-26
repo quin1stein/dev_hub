@@ -1,5 +1,5 @@
 "use server";
-
+import slugify from "slugify";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/utils/supabase/server";
 import { prisma } from "@/utils/prisma";
@@ -69,8 +69,14 @@ export async function signUp(formData: FormData) {
 
   try {
     // Store Supabase UID in Prisma
+    const slugProfile = slugify(formData.get("name") as string, {
+      replacement: "-",
+      strict: true,
+      lower: true,
+    });
     await prisma.user.create({
       data: {
+        profileSlug: `${slugProfile}-${Date.now().toString(36)}`,
         id: supabaseUser.user.id, // Store the Supabase UID
         email: data.email,
         name: formData.get("name") as string,

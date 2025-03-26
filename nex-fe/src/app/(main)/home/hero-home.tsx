@@ -4,13 +4,12 @@ import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import { Posts } from "@/lib/types/types";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-
 export const HeroHome = () => {
   const {
     data: posts,
     isLoading,
     isError,
-  } = useQuery<Posts[]>({
+  } = useQuery<Posts[], Error>({
     queryKey: ["posts"],
     queryFn: async () => {
       const response = await fetch("/api/graphql/", {
@@ -18,21 +17,20 @@ export const HeroHome = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           query: `query GetPosts {
-  getPosts { 
-    id
-    title
-    slug
-    content
-
-    user {
-      name
-    }
-    focusAreas {
-      name
-      label
-    }
-  }
-}`,
+                      getPosts { 
+                        id
+                        title
+                        slug
+                        content
+                        user {
+                          name
+                        }
+                        focusAreas {
+                          name
+                          label
+                        }
+                      }
+                    }`,
         }),
       });
 
@@ -58,6 +56,7 @@ export const HeroHome = () => {
       <section className="h-full overflow-y-auto space-y-4">
         {posts ? (
           posts?.map((post, index) => {
+            console.log(post);
             return (
               <Link
                 href={`/home/${post.slug}`}

@@ -1,7 +1,9 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-
+import { useUser } from "@/lib/contexts/userContext";
 export const NavHome = () => {
+  const user = useUser();
   return (
     <nav className="flex justify-evenly items-center w-full h-[10vh] shadow-xl border-b-2">
       {/* logo of the website that redirects user to the /home route */}
@@ -47,7 +49,7 @@ export const NavHome = () => {
           alt="profile"
         />
 
-        <h1 className="font-bold">User Name</h1>
+        <h1 className="font-bold">{user.name}</h1>
       </Link>
     </nav>
   );

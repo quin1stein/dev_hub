@@ -1,5 +1,5 @@
 import { prisma } from "@/utils/prisma";
-
+import slugify from "slugify";
 async function main() {
   console.log("Seeding data..");
 
@@ -7,14 +7,14 @@ async function main() {
   const refreshPost = await prisma.post.deleteMany({});
   const refreshUser = await prisma.user.deleteMany({});
   const refreshFocusAr = await prisma.focusArea.deleteMany({});
-
-  const createUser = await prisma.user.create({
-    data: {
-      name: "KINOOOO",
-      email: "sepriothofficial@gmail.com",
-      id: "607be3b1-1edb-455f-bf02-5cdaf51fe1ec",
-    },
-  });
+  // const createUser = await prisma.user.create({
+  //   data: {
+  //     profileSlug: `${slugged}-${Date.now().toString(36)}`,
+  //     name: "KINOOOO",
+  //     email: "sepriothofficial@gmail.com",
+  //     id: "607be3b1-1edb-455f-bf02-5cdaf51fe1ec",
+  //   },
+  // });
   console.log("User created.");
   // const createUsers = await prisma.user.createMany({
   //   data: [
