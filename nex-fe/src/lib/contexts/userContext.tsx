@@ -7,6 +7,7 @@ type User = {
   createdAt: string;
   role: string;
   updatedAt: string;
+  profileSlug: string;
 };
 
 const userContext = createContext<User | undefined>(undefined);
@@ -26,6 +27,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
                 role
                 createdAt
                 updatedAt
+                profileSlug
             }
           }`,
         }),

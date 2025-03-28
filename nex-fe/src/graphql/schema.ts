@@ -32,6 +32,7 @@ export const typeDefs = gql`
     id: ID!
     name: String!
     email: String!
+    profileSlug: String!
     role: UserRole!
     posts: [Post!]!
     createdAt: String!

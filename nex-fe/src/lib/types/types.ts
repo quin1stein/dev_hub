@@ -24,6 +24,7 @@ export interface FormData {
 // User type, assuming minimal details
 export type User = {
   id: string;
+  profileSlug: string;
   role: string;
   name: string;
   email: string;

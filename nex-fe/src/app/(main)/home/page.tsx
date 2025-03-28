@@ -3,11 +3,9 @@ import { HeroHome } from "@/app/(main)/home/hero-home";
 export default function Page() {
   return (
     <>
-      <main className="flex justify-between items-center">
-        {" "}
-        <HeroHome />
-        <AsideRightHome />
-      </main>
+      {" "}
+      <HeroHome />
+      <AsideRightHome />
     </>
   );
 }

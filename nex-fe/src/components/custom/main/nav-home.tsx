@@ -2,8 +2,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useUser } from "@/lib/contexts/userContext";
+import { useState } from "react";
+import { DropdownMenuDemo } from "../dropdown-menu";
 export const NavHome = () => {
   const user = useUser();
+  const [toggle, setToggle] = useState<boolean>(false);
   return (
     <nav className="flex justify-evenly items-center w-full h-[10vh] shadow-xl border-b-2">
       {/* logo of the website that redirects user to the /home route */}
@@ -37,20 +40,17 @@ export const NavHome = () => {
         </ul>
       </section>
       {/* profile of the user */}
-      <Link
-        className="h-full justify-evenly flex items-center w-[17em]"
-        href={"/undefined"}
-      >
-        <Image
-          className="transition-all duration-300 h-[75%] rounded-md w-[50%] bg-black hover:bg-amber-300"
+      <article className=" h-full justify-evenly flex items-center w-[17em]">
+        {/* <Image
+          className="cursor-pointer transition-all duration-300 h-[75%] rounded-md w-[50%] bg-black hover:bg-amber-300"
           src={"/rawprofile.svg"}
           width={500}
           height={500}
           alt="profile"
-        />
-
+        /> */}
+        <DropdownMenuDemo name={user.name} link={user.profileSlug} />
         <h1 className="font-bold">{user.name}</h1>
-      </Link>
+      </article>
     </nav>
   );
 };

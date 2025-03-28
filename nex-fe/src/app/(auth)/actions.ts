@@ -3,6 +3,7 @@ import slugify from "slugify";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/utils/supabase/server";
 import { prisma } from "@/utils/prisma";
+import { redirect } from "next/navigation";
 
 // Login function
 export async function login(formData: FormData) {
@@ -93,3 +94,16 @@ export async function signUp(formData: FormData) {
     return { status: "Failed to save user to database!", success: false };
   }
 }
+
+export const logout = async () => {
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    redirect("/error");
+  }
+
+  revalidatePath("/", "layout");
+  redirect("/");
+};

@@ -97,6 +97,7 @@ export const resolvers = {
             createdAt: true,
             role: true,
             updatedAt: true,
+            profileSlug: true,
           },
         });
         if (!getUserProfile) {
@@ -107,7 +108,7 @@ export const resolvers = {
       } catch (err: unknown) {
         console.error("An error has occured: " + err);
       }
-    },
+    }, // get user profile
   },
   Mutation: {
     createPost: async (

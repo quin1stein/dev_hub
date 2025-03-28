@@ -54,7 +54,7 @@ const Page = () => {
   console.log(post);
   return (
     <>
-      <main className="flex p-4 space-x-4 h-[80vh]">
+      <main className="p-4 space-x-4 h-[80vh]">
         <section className="flex-grow bg-white p-6 rounded-2xl shadow-lg">
           <h1 className="text-2xl font-bold mb-2">{post?.title}</h1>
           <div className="text-gray-600 mb-4">
@@ -76,8 +76,8 @@ const Page = () => {
             ))}
           </div>
         </section>
-        <AsideRightHome />
-      </main>
+      </main>{" "}
+      <AsideRightHome />
     </>
   );
 };
