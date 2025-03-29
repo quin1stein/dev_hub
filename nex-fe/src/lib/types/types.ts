@@ -1,5 +1,3 @@
-// For the signup form data
-// input
 export interface SignupFormData {
   name: string;
   email: string;
@@ -7,50 +5,44 @@ export interface SignupFormData {
   confirmPassword: string;
 }
 
-// For focus areas with name and label
-// input
 export interface FocusAreaOption {
   name: string;
   label: string;
 }
 
-// For the post creation form
 export interface FormData {
   title: string;
   content: string;
   focusAreas: FocusAreaOption[];
 }
 
-// User type, assuming minimal details
 export type User = {
   id: string;
   profileSlug: string;
-  role: string;
+  role: Role;
   name: string;
   email: string;
-  posts?: Posts[]; // A user can have multiple posts
-  comments?: Comment[]; // A user can have multiple comments
+  posts?: Posts[];
+  comments?: Comment[];
 };
 
-// Comment type with association to Post
 export type Comment = {
-  id: string;
+  id: number;
   content: string;
   user: User;
   post: Posts;
 };
 
-// Vote type with association to User
 export type Vote = {
   id: string;
   user: User;
-  value: 1 | -1; // Could be 1 for upvote, -1 for downvote
+  value: 1 | -1;
 };
 
-// Post type with associations to User, Comments, and FocusAreas
 export type Posts = {
-  id: string;
+  id: number;
   slug: string;
+  createdAt: string;
   title: string;
   content: string;
   focusAreas: FocusAreaOption[];
@@ -63,3 +55,11 @@ export type PaginatedPost = {
   posts: Posts[];
   nextCursor: string | null;
 };
+
+enum Role {
+  user,
+  moderator,
+  editor,
+  contributor,
+  admin,
+}
