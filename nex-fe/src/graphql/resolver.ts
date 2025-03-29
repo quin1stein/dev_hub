@@ -3,6 +3,7 @@ import { prisma } from "@/utils/prisma";
 import slugify from "slugify";
 import { FocusAreaOption } from "@/lib/types/types";
 import { redirect } from "next/navigation";
+import { GraphQLError } from "graphql";
 
 export const resolvers = {
   Query: {
@@ -54,6 +55,17 @@ export const resolvers = {
             title: true,
             content: true,
             slug: true,
+            createdAt: true,
+            comments: {
+              select: {
+                user: {
+                  select: { name: true, profileSlug: true },
+                },
+                content: true,
+                createdAt: true,
+                id: true,
+              },
+            },
             focusAreas: {
               select: {
                 name: true,
@@ -63,6 +75,7 @@ export const resolvers = {
             user: {
               select: {
                 name: true,
+                profileSlug: true,
                 role: true,
               },
             },
@@ -162,5 +175,36 @@ export const resolvers = {
         throw new Error("Failed to create post");
       }
     }, // end of createPost()
+    createComment: async (
+      _: unknown,
+      args: { content: string; postId: number }
+    ) => {
+      const supabase = await createClient();
+      const { data, error } = await supabase.auth.getUser();
+
+      if (!data.user || error) {
+        throw new GraphQLError("Unauthorized: Please log in to comment.", {
+          extensions: { code: "UNAUTHORIZED" },
+        });
+      }
+
+      try {
+        const createComment = await prisma.comment.create({
+          data: {
+            content: args.content,
+            user: { connect: { id: data.user.id } },
+            post: { connect: { id: args.postId } },
+          },
+        });
+
+        return createComment;
+      } catch (err) {
+        console.error("Database error:", err);
+        throw new GraphQLError("Failed to create comment", {
+          extensions: { code: "INTERNAL_SERVER_ERROR" },
+        });
+      }
+    },
+    // end of createComment
   },
 };

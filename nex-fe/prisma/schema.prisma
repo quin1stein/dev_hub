@@ -9,15 +9,16 @@ datasource db {
 }
 
 model User {
-  id          String   @id
+  id          String    @id
   name        String
-  profileSlug String?  @unique
-  email       String   @unique
-  role        Role     @default(user)
+  profileSlug String    @unique
+  email       String    @unique
+  role        Role      @default(user)
   posts       Post[]
   votes       Vote[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  comment     Comment[]
 }
 
 model Post {
@@ -45,6 +46,8 @@ model FocusArea {
 model Comment {
   id        Int      @id @default(autoincrement())
   content   String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
   postId    Int
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   votes     Vote[]
@@ -76,5 +79,8 @@ enum VoteType {
 
 enum Role {
   user
+  moderator
+  editor
+  contributor
   admin
 }

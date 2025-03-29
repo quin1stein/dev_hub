@@ -3,9 +3,9 @@ import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Posts } from "@/lib/types/types";
 import { AsideRightHome } from "@/components/custom/main/aside-right-home";
-
+import { CommentForm } from "./comment-form";
 const Page = () => {
-  const { slug } = useParams();
+  const { slug } = useParams() as { slug: string };
 
   const {
     data: post,
@@ -18,24 +18,34 @@ const Page = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          query: `
-            query GetSpecificPost($slug: String!) {
-              getSpecificPost(slug: $slug) {
-                id
-                content
-                title
-                slug
-                focusAreas {
-                  label
-                  name
+          query: `query GetSpecificPost($slug: String!) {
+                getSpecificPost(slug: $slug) {
+                  content
+                  title
+                  slug
+                  id  
+                  createdAt
+                  comments {
+                    user {
+                      name
+                      profileSlug
+                    }
+                    content
+                    createdAt
+                    id
+                  }
+                  focusAreas {
+                    name
+                    label
+                  }
+                  user {
+                    name
+                    profileSlug
+                    role
+                  }
+
                 }
-                user {
-                  name
-                  role
-                }
-              }
-            }
-          `,
+              }`,
           variables: { slug: slug },
         }),
       });
@@ -48,13 +58,13 @@ const Page = () => {
       return result.data.getSpecificPost;
     },
   });
-
+  console.log(post);
   if (isLoading) return <p>Loading...</p>;
   if (errorFound) return <p>Error loading post: {errorFound.message}</p>;
   console.log(post);
   return (
     <>
-      <main className="p-4 space-x-4 h-[80vh]">
+      <main className="p-4 space-x-4 h-[90vh] relative">
         <section className="flex-grow bg-white p-6 rounded-2xl shadow-lg">
           <h1 className="text-2xl font-bold mb-2">{post?.title}</h1>
           <div className="text-gray-600 mb-4">
@@ -76,6 +86,21 @@ const Page = () => {
             ))}
           </div>
         </section>
+        {/* Comment section */}
+        <section>
+          {post?.comments.length ? (
+            post.comments.map((comment, index) => {
+              return (
+                <article key={index}>
+                  {comment.user.name} {comment.content}
+                </article>
+              );
+            })
+          ) : (
+            <p className="text-center">No Comments yet</p>
+          )}
+        </section>
+        {post && <CommentForm id={post.id} slug={slug} />}
       </main>{" "}
       <AsideRightHome />
     </>

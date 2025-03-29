@@ -17,7 +17,9 @@ export const typeDefs = gql`
     content: String!
     slug: String!
     focusAreas: [FocusArea!]!
+    createdAt: String!
     user: User!
+    comments: [Comment!]!
   }
 
   type Comment {
@@ -26,6 +28,7 @@ export const typeDefs = gql`
     post: Post!
     user: User!
     createdAt: String!
+    updatedAt: String!
   }
 
   type User {
@@ -61,5 +64,6 @@ export const typeDefs = gql`
       content: String!
       focusAreas: [FocusAreaInput!]!
     ): Post!
+    createComment(content: String!, postId: Int!): Comment
   }
 `;
