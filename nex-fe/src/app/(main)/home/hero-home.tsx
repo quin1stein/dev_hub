@@ -4,6 +4,7 @@ import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import { Posts } from "@/lib/types/types";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
+
 export const HeroHome = () => {
   const {
     data: posts,
@@ -48,44 +49,66 @@ export const HeroHome = () => {
     },
   });
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Failed to fetch posts.</div>;
+  if (isLoading) return <div className="text-center py-10">Loading...</div>;
+  if (isError)
+    return (
+      <div className="text-center py-10 text-red-500">
+        Failed to fetch posts.
+      </div>
+    );
 
   return (
-    <main className="flex-grow h-[90vh] p-4">
-      <section className="h-full overflow-y-auto space-y-4">
+    <main className="flex-grow h-[90vh] p-6">
+      <section className="h-full overflow-y-auto space-y-6">
         {posts ? (
-          posts?.map((post, index) => {
-            console.log(post);
-            return (
-              <Link
-                href={`/home/${post.slug}`}
-                key={index}
-                className="flex items-start p-4 border-2 rounded-lg gap-4"
-              >
-                <Image
-                  src="/rawprofile.svg"
-                  alt="Profile Image"
-                  width={50}
-                  height={50}
-                  className="rounded-full"
-                />
-                <div className="flex-grow">
-                  <h2 className="font-semibold">{post.user.name}</h2>
-                  <p className="text-lg">{post.title}</p>
-                  <p>{post.content}</p>
-                  <div className="flex items-center justify-start gap-2 mt-2">
-                    <FaArrowUp className="cursor-pointer hover:text-green-500" />
-                    <span>12</span>
-                    <FaArrowDown className="cursor-pointer hover:text-red-500" />
-                    <span>14</span>
-                  </div>
+          posts.map((post) => (
+            <Link
+              href={`/home/${post.slug}`}
+              key={post.id}
+              className="flex p-6 border border-gray-300 rounded-2xl shadow-md bg-white hover:shadow-lg transition-all duration-200"
+            >
+              <Image
+                src="/rawprofile.svg"
+                alt="Profile Image"
+                width={50}
+                height={50}
+                className="rounded-full self-start"
+              />
+              <div className="flex-grow ml-4">
+                <h2 className="font-semibold text-gray-700 text-lg">
+                  {post.user.name}
+                </h2>
+                <p className="text-xl font-bold text-gray-900 mt-1">
+                  {post.title}
+                </p>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {post.focusAreas.map((focus) => (
+                    <span
+                      key={focus.name}
+                      className="px-3 py-1 text-sm rounded-md bg-blue-100 text-blue-700"
+                    >
+                      {focus.label}
+                    </span>
+                  ))}
                 </div>
-              </Link>
-            );
-          })
+                <p className="text-gray-700 mt-3 line-clamp-2">
+                  {post.content}
+                </p>
+                <div className="flex items-center gap-3 mt-4 text-gray-500">
+                  <button className="flex items-center space-x-1 hover:text-green-500">
+                    <FaArrowUp className="cursor-pointer" />
+                    <span>12</span>
+                  </button>
+                  <button className="flex items-center space-x-1 hover:text-red-500">
+                    <FaArrowDown className="cursor-pointer" />
+                    <span>14</span>
+                  </button>
+                </div>
+              </div>
+            </Link>
+          ))
         ) : (
-          <p>No posts</p>
+          <p className="text-center text-gray-600">No posts available.</p>
         )}
       </section>
     </main>

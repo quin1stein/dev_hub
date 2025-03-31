@@ -96,7 +96,9 @@ export const resolvers = {
       const { data, error } = await supabase.auth.getUser();
 
       if (!data || error) {
-        throw new Error("User not authenticated");
+        throw new GraphQLError("User not authenticated", {
+          extensions: { code: "UNAUTHORIZED" },
+        });
       }
 
       try {
@@ -132,7 +134,9 @@ export const resolvers = {
       const { data, error } = await supabase.auth.getUser();
 
       if (error || !data) {
-        throw new Error("Authentication failed! Please log in.");
+        throw new GraphQLError("User not authenticated", {
+          extensions: { code: "UNAUTHORIZED" },
+        });
       }
 
       const existingUser = await prisma.user.findUnique({
@@ -148,7 +152,9 @@ export const resolvers = {
         strict: true,
         trim: true,
       });
-      const slugPost = `${slugBase}-${Date.now().toString(36)}`;
+      const slugPost = `${slugBase}-${Date.now().toString(36)}-${Math.floor(
+        Math.random() * 100
+      )}`;
 
       try {
         const post = await prisma.post.create({
@@ -194,6 +200,9 @@ export const resolvers = {
             content: args.content,
             user: { connect: { id: data.user.id } },
             post: { connect: { id: args.postId } },
+          },
+          include: {
+            post: true,
           },
         });
 

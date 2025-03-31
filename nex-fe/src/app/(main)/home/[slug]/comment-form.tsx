@@ -76,10 +76,10 @@ export function CommentForm({ id, slug }: { id: number; slug: string }) {
   }
 
   return (
-    <main className="absolute bottom-0 left-[30%]">
+    <main className="fixed bottom-0 left-[40%]">
       <form onSubmit={handleSubmit(onSubmit)} className="space-x-2">
         <input
-          className="p-2 border-black/20 focus:border-black border-2 rounded-md"
+          className="p-2 border-black/20 bg-white focus:border-black border-2 rounded-md"
           type="text"
           {...register("content", {
             required: "Can't comment without entering any character.",

@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Posts } from "@/lib/types/types";
 import { AsideRightHome } from "@/components/custom/main/aside-right-home";
 import { CommentForm } from "./comment-form";
+import { format } from "date-fns";
 const Page = () => {
   const { slug } = useParams() as { slug: string };
 
@@ -60,7 +61,7 @@ const Page = () => {
   });
   console.log(post);
   if (isLoading) return <p>Loading...</p>;
-  if (errorFound) return <p>Error loading post: {errorFound.message}</p>;
+  if (errorFound) return <p>Error loading post: 404 Post not found</p>;
   console.log(post);
   return (
     <>
@@ -87,20 +88,38 @@ const Page = () => {
           </div>
         </section>
         {/* Comment section */}
-        <section>
-          {post?.comments.length ? (
-            post.comments.map((comment, index) => {
-              return (
-                <article key={index}>
-                  {comment.user.name} {comment.content}
-                </article>
-              );
-            })
-          ) : (
-            <p className="text-center">No Comments yet</p>
-          )}
+        {/* Comment section */}
+        <section className="mt-6">
+          <h2 className="text-xl font-semibold mb-4">Comments</h2>
+          <div className="no-scrollbar space-y-4 h-[40vh] overflow-y-auto">
+            {post?.comments.length ? (
+              post.comments.map((comment) => {
+                console.log(comment.createdAt);
+                return (
+                  <div
+                    key={comment.id}
+                    className="border p-4 rounded-lg shadow-sm"
+                  >
+                    <div className="mb-2">
+                      <span className="font-semibold">{comment.user.name}</span>
+                    </div>
+                    <p className="text-gray-700">{comment.content}</p>
+                    <p className="text-sm text-gray-500 mt-1">
+                      {format(
+                        new Date(Number(comment.createdAt)),
+                        "dd MM, yyyy"
+                      )}
+                    </p>
+                  </div>
+                );
+              })
+            ) : (
+              <p className="text-center text-gray-600">No comments yet.</p>
+            )}
+          </div>
         </section>
-        {post && <CommentForm id={post.id} slug={slug} />}
+
+        {post && <CommentForm id={Number(post.id)} slug={slug} />}
       </main>{" "}
       <AsideRightHome />
     </>

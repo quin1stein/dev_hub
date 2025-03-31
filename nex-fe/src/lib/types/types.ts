@@ -31,6 +31,7 @@ export type Comment = {
   content: string;
   user: User;
   post: Posts;
+  createdAt: string;
 };
 
 export type Vote = {
