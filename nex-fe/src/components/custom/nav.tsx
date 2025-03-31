@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Nav({ position = "static" }: { position?: string }) {
   return (
     <nav
-      className={`w-full flex justify-between items-center px-6 py-4 shadow-md bg-white ${position}`}
+      className={`w-full flex justify-between items-center px-6 py-4 shadow-md bg-gray-800 ${position}`}
     >
       <section className="flex items-center space-x-3">
         <Image
@@ -36,13 +36,13 @@ export default function Nav({ position = "static" }: { position?: string }) {
       <section className="space-x-1">
         <Link
           href="/login"
-          className="px-4 py-2 rounded-lg border-2 border-black transition"
+          className="px-4 py-2 rounded-lg border-2 border-black hover:bg-gray-900 transition"
         >
           Log In
         </Link>
         <Link
           href="/signup"
-          className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition"
+          className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-700 transition"
         >
           Sign In
         </Link>
