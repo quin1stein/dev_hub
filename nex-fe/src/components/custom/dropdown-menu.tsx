@@ -27,7 +27,7 @@ export function DropdownMenuDemo({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">{name}</Button>
+        <Button variant={"outline"}>{name}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" side="bottom" align="start">
         <DropdownMenuLabel>{name}</DropdownMenuLabel>

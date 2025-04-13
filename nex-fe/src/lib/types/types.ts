@@ -24,6 +24,8 @@ export type User = {
   email: string;
   posts?: Posts[];
   comments?: Comment[];
+  createdAt: number;
+  updatedAt: number;
 };
 
 export type Comment = {

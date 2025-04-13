@@ -65,7 +65,7 @@ export const HeroHome = () => {
             <Link
               href={`/home/${post.slug}`}
               key={post.id}
-              className="flex p-6 border border-gray-300 rounded-2xl shadow-md bg-white hover:shadow-lg transition-all duration-200"
+              className="flex p-6 border rounded-2xl shadow-md hover:shadow-lg transition-all duration-200"
             >
               <Image
                 src="/rawprofile.svg"
@@ -75,26 +75,20 @@ export const HeroHome = () => {
                 className="rounded-full self-start"
               />
               <div className="flex-grow ml-4">
-                <h2 className="font-semibold text-gray-700 text-lg">
-                  {post.user.name}
-                </h2>
-                <p className="text-xl font-bold text-gray-900 mt-1">
-                  {post.title}
-                </p>
+                <h2 className="font-semibold  text-lg">{post.user.name}</h2>
+                <p className="text-xl font-bold mt-1">{post.title}</p>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {post.focusAreas.map((focus) => (
                     <span
                       key={focus.name}
-                      className="px-3 py-1 text-sm rounded-md bg-blue-100 text-blue-700"
+                      className="px-3 py-1 text-sm rounded-md "
                     >
                       {focus.label}
                     </span>
                   ))}
                 </div>
-                <p className="text-gray-700 mt-3 line-clamp-2">
-                  {post.content}
-                </p>
-                <div className="flex items-center gap-3 mt-4 text-gray-500">
+                <p className=" mt-3 line-clamp-2">{post.content}</p>
+                <div className="flex items-center gap-3 mt-4 ">
                   <button className="flex items-center space-x-1 hover:text-green-500">
                     <FaArrowUp className="cursor-pointer" />
                     <span>12</span>

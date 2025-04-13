@@ -48,7 +48,7 @@ export const NavHome = () => {
           height={500}
           alt="profile"
         /> */}
-        <DropdownMenuDemo name={user.name} link={user.profileSlug} />
+        <DropdownMenuDemo name={user.name} link={`/home/profile`} />
         <h1 className="font-bold">{user.name}</h1>
       </article>
     </nav>

@@ -5,6 +5,7 @@ import { Posts } from "@/lib/types/types";
 import { AsideRightHome } from "@/components/custom/main/aside-right-home";
 import { CommentForm } from "./comment-form";
 import { format } from "date-fns";
+import { DropDownPost } from "./dropDown";
 const Page = () => {
   const { slug } = useParams() as { slug: string };
 
@@ -65,23 +66,28 @@ const Page = () => {
   console.log(post);
   return (
     <>
-      <main className="p-4 space-x-4 h-[90vh] relative">
-        <section className="flex-grow bg-white p-6 rounded-2xl shadow-lg">
-          <h1 className="text-2xl font-bold mb-2">{post?.title}</h1>
+      <main className="p-4 flex-grow space-x-4 h-[90vh] relative">
+        <section className="flex-grow p-6 rounded-2xl shadow-lg">
+          <section className="flex justify-between items-center">
+            {" "}
+            <h1 className="text-2xl font-bold mb-2">{post?.title} </h1>
+            {post?.user.profileSlug && (
+              <DropDownPost
+                authorLink={post.user.profileSlug}
+                postSlug={slug}
+              />
+            )}{" "}
+          </section>
+
           <div className="text-gray-600 mb-4">
             <span>
               by {post?.user.name} | Role: {post?.user.role}
             </span>
           </div>
-          <article className="text-gray-800 leading-relaxed mb-6">
-            {post?.content}
-          </article>
+          <article className=" leading-relaxed mb-6">{post?.content}</article>
           <div className="flex gap-2 mt-4">
             {post?.focusAreas.map((area) => (
-              <span
-                key={area.name}
-                className="bg-blue-100 text-blue-700 px-2 py-1 rounded-md text-sm"
-              >
+              <span key={area.name} className="  px-2 py-1 rounded-md text-sm">
                 {area.label}
               </span>
             ))}

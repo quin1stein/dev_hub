@@ -1,14 +1,7 @@
 import { useContext, createContext } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { SkeletonCard } from "@/components/custom/skeleton";
-type User = {
-  name: string;
-  email: string;
-  createdAt: string;
-  role: string;
-  updatedAt: string;
-  profileSlug: string;
-};
+import { User } from "../types/types";
 
 const userContext = createContext<User | undefined>(undefined);
 
