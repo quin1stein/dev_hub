@@ -56,6 +56,7 @@ export const typeDefs = gql`
     getPosts: [Post!]!
     getSpecificPost(slug: String!): Post!
     getUserInfo: User!
+    getUserProfileThruSlug(profileSlug: String!): User!
   }
 
   type Mutation {

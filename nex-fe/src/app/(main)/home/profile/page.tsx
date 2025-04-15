@@ -9,14 +9,14 @@ const Page = () => {
   if (!user) {
     return (
       <main className="h-full w-full flex items-center justify-center">
-        <p className="text-gray-500">Loading profile...</p>
+        <p className="text-gray-500">User not found 404</p>
       </main>
     );
   }
 
   return (
-    <main className="h-full w-full p-6 bg-gray-50">
-      <section className="max-w-3xl mx-auto bg-white shadow-md rounded-xl p-6 space-y-6">
+    <main className="h-full w-full p-6">
+      <section className="max-w-3xl mx-auto shadow-md rounded-xl p-6 space-y-6">
         <div className="flex items-center gap-4">
           <Image
             src="/rawprofile.svg"

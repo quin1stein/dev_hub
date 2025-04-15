@@ -51,7 +51,7 @@ export function CommentForm({ id, slug }: { id: number; slug: string }) {
     },
     onSuccess: () => {
       toast("Comment successfully created", {
-        description: `Your comment has been added to post ID.`,
+        description: `Your comment has been added.`,
         action: {
           label: "Close",
           onClick: () => console.log("Undo"),

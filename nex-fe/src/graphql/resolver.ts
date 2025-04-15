@@ -97,7 +97,7 @@ export const resolvers = {
 
       if (!data || error) {
         throw new GraphQLError("User not authenticated", {
-          extensions: { code: "UNAUTHORIZED" },
+          extensions: { code: "UNAUTHORIZED", http: { status: 404 } },
         });
       }
 
@@ -124,6 +124,56 @@ export const resolvers = {
         console.error("An error has occured: " + err);
       }
     }, // get user profile
+    getUserProfileThruSlug: async (
+      _: unknown,
+      args: { profileSlug: string }
+    ) => {
+      const supabase = await createClient();
+      const { data, error } = await supabase.auth.getUser();
+
+      if (!data || error) {
+        throw new GraphQLError("User not authenticated", {
+          extensions: {
+            code: "USER_NOT_FOUND",
+            http: { status: 404 },
+            timestamp: new Date().toISOString(),
+          },
+        });
+      }
+
+      try {
+        const getUser = await prisma.user.findUnique({
+          where: { profileSlug: args.profileSlug },
+
+          select: {
+            name: true,
+            updatedAt: true,
+            role: true,
+            createdAt: true,
+            posts: {
+              select: {
+                title: true,
+                slug: true,
+                createdAt: true,
+                content: true,
+                focusAreas: {
+                  select: {
+                    name: true,
+                    label: true,
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        return getUser;
+      } catch (err: unknown) {
+        throw new GraphQLError("Retrieving User information Error", {
+          extensions: { code: "USER_INFO_ERROR", http: { status: 500 } },
+        });
+      }
+    }, // get user data(s) through slug
   },
   Mutation: {
     createPost: async (
@@ -152,9 +202,7 @@ export const resolvers = {
         strict: true,
         trim: true,
       });
-      const slugPost = `${slugBase}-${Date.now().toString(36)}-${Math.floor(
-        Math.random() * 100
-      )}`;
+      const slugPost = `${slugBase}-${Date.now().toString(36)}`;
 
       try {
         const post = await prisma.post.create({
@@ -178,7 +226,9 @@ export const resolvers = {
         return post;
       } catch (err: unknown) {
         console.error("Error creating post:", err);
-        throw new Error("Failed to create post");
+        throw new GraphQLError("Failed to create post", {
+          extensions: { code: "INTERNAL_SERVER_ERROR", http: { status: 500 } },
+        });
       }
     }, // end of createPost()
     createComment: async (

@@ -97,7 +97,11 @@ const Page = () => {
         {/* Comment section */}
         <section className="mt-6">
           <h2 className="text-xl font-semibold mb-4">Comments</h2>
-          <div className="no-scrollbar space-y-4 h-[40vh] overflow-y-auto">
+          <div
+            className={`no-scrollbar ${
+              post?.comments.length ? "border-b-4" : ""
+            } space-y-4 h-[40vh] overflow-y-auto`}
+          >
             {post?.comments.length ? (
               post.comments.map((comment) => {
                 console.log(comment.createdAt);
