@@ -15,10 +15,11 @@ const handler = startServerAndCreateNextHandler<NextRequest>(server, {
   context: async (req) => {
     const supabase = await createClient();
     const { data, error } = await supabase.auth.getUser();
-
+    const user = data.user && !error ? data.user : null;
     return {
       req,
-      user: data.user || !error ? data.user : null,
+      user,
+      isAuthenticated: !!user,
     };
   },
 });

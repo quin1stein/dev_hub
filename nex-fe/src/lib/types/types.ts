@@ -66,3 +66,7 @@ enum Role {
   contributor,
   admin,
 }
+export interface Context {
+  user: { id: string; email: string; role: string };
+  isAuthenticated: boolean;
+}
