@@ -4,8 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import { Posts } from "@/lib/types/types";
 import { AsideRightHome } from "@/components/custom/main/aside-right-home";
 import { CommentForm } from "./comment-form";
-import { format } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import { DropDownPost } from "./dropDown";
+import { DropDownComment } from "./dropDownComments";
+import Link from "next/link";
 const Page = () => {
   const { slug } = useParams() as { slug: string };
 
@@ -87,13 +89,15 @@ const Page = () => {
           <article className=" leading-relaxed mb-6">{post?.content}</article>
           <div className="flex gap-2 mt-4">
             {post?.focusAreas.map((area) => (
-              <span key={area.name} className="  px-2 py-1 rounded-md text-sm">
+              <span
+                key={area.name}
+                className="dark:bg-gray-300 dark:text-black px-2 py-1 rounded-md text-sm"
+              >
                 {area.label}
               </span>
             ))}
           </div>
         </section>
-        {/* Comment section */}
         {/* Comment section */}
         <section className="mt-6">
           <h2 className="text-xl font-semibold mb-4">Comments</h2>
@@ -103,21 +107,26 @@ const Page = () => {
             } space-y-4 h-[40vh] overflow-y-auto`}
           >
             {post?.comments.length ? (
-              post.comments.map((comment) => {
-                console.log(comment.createdAt);
+              post.comments.map((comment, index) => {
                 return (
-                  <div
-                    key={comment.id}
-                    className="border p-4 rounded-lg shadow-sm"
-                  >
-                    <div className="mb-2">
-                      <span className="font-semibold">{comment.user.name}</span>
+                  <div key={index} className="border p-4 roundedalg shadow-sm">
+                    <div className="mb-2 flex justify-between">
+                      <Link
+                        href={`/home/profile/${comment.user.profileSlug}`}
+                        className="font-semibold hover:underline"
+                      >
+                        {comment.user.name}
+                      </Link>
+                      <DropDownComment />
                     </div>
-                    <p className="text-gray-700">{comment.content}</p>
+                    <p>{comment.content}</p>
                     <p className="text-sm text-gray-500 mt-1">
-                      {format(
+                      {formatDistanceToNow(
                         new Date(Number(comment.createdAt)),
-                        "dd MM, yyyy"
+                        {
+                          addSuffix: true,
+                          includeSeconds: true,
+                        }
                       )}
                     </p>
                   </div>

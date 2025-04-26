@@ -21,6 +21,7 @@ export const resolvers = {
             title: true,
             slug: true,
             content: true,
+            createdAt: true,
             user: {
               select: {
                 name: true,
@@ -44,7 +45,9 @@ export const resolvers = {
       const supabase = await createClient();
       const { data, error } = await supabase.auth.getUser();
       if (!data.user || error) {
-        throw new Error("Not authenticated.");
+        throw new GraphQLError("Not authenticated.", {
+          extensions: { code: "POST_NOT_FOUND", http: { status: 404 } },
+        });
       }
 
       try {

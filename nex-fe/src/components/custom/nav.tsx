@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Nav({ position = "static" }: { position?: string }) {
   return (
     <nav
-      className={`w-full flex justify-between items-center px-6 py-4 shadow-md bg-white ${position}`}
+      className={`w-full flex justify-between items-center px-6 py-4 shadow-md ${position}`}
     >
       <section className="flex items-center space-x-3">
         <Image

@@ -86,6 +86,7 @@ const Page = () => {
                   {post.createdAt &&
                     formatDistanceToNow(new Date(Number(post.createdAt)), {
                       addSuffix: true,
+                      includeSeconds: true,
                     })}
                 </p>
                 <div className="flex flex-wrap gap-2 mb-2">
