@@ -1,12 +1,11 @@
 import { GraphQLError } from "graphql";
 import { prisma } from "@/utils/prisma";
 import slugify from "slugify";
-import { FocusAreaOption } from "@/lib/types/types";
-import { Context } from "@/lib/types/types";
+import { FocusAreaOption, Context } from "@/lib/types/types";
 
 export const resolvers = {
   Query: {
-    getPosts: async (_parent: unknown, _args: unknown, context: Context) => {
+    getPosts: async (_: unknown, _args: unknown, context: Context) => {
       if (!context.isAuthenticated) {
         throw new GraphQLError("Must be authenticated", {
           extensions: { code: "UNAUTHORIZED" },
@@ -36,7 +35,7 @@ export const resolvers = {
     },
 
     getSpecificPost: async (
-      _parent: unknown,
+      _: unknown,
       args: { slug: string },
       context: Context
     ) => {
@@ -81,7 +80,7 @@ export const resolvers = {
       }
     },
 
-    getUserInfo: async (_parent: unknown, _args: unknown, context: Context) => {
+    getUserInfo: async (_: unknown, _args: unknown, context: Context) => {
       if (!context.isAuthenticated) {
         throw new GraphQLError("User not authenticated", {
           extensions: { code: "UNAUTHORIZED" },
@@ -117,7 +116,7 @@ export const resolvers = {
     },
 
     getUserProfileThruSlug: async (
-      _parent: unknown,
+      _: unknown,
       args: { profileSlug: string },
       context: Context
     ) => {
@@ -159,7 +158,7 @@ export const resolvers = {
 
   Mutation: {
     createPost: async (
-      _parent: unknown,
+      _: unknown,
       args: { title: string; content: string; focusAreas: FocusAreaOption[] },
       context: Context
     ) => {
@@ -213,7 +212,7 @@ export const resolvers = {
     },
 
     createComment: async (
-      _parent: unknown,
+      _: unknown,
       args: { content: string; postId: number },
       context: Context
     ) => {

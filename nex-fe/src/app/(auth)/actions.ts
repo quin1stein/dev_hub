@@ -12,7 +12,6 @@ export async function login(formData: FormData) {
   const email = (formData.get("email") as string).trim();
   const password = (formData.get("password") as string).trim();
 
-  // Check if user exists in Prisma
   const user = await prisma.user.findUnique({
     where: { email },
   });
@@ -52,7 +51,6 @@ export async function signUp(formData: FormData) {
     password: formData.get("password") as string,
   };
 
-  // Check if user already exists in Prisma
   const existingUser = await prisma.user.findUnique({
     where: { email: data.email },
   });
@@ -61,7 +59,6 @@ export async function signUp(formData: FormData) {
     return { status: "User already exists!", success: false };
   }
 
-  // Sign up the user in Supabase
   const { data: supabaseUser, error } = await supabase.auth.signUp(data);
 
   if (error || !supabaseUser?.user) {
@@ -69,7 +66,6 @@ export async function signUp(formData: FormData) {
   }
 
   try {
-    // Store Supabase UID in Prisma
     const slugProfile = slugify(formData.get("name") as string, {
       replacement: "-",
       strict: true,
@@ -78,7 +74,7 @@ export async function signUp(formData: FormData) {
     await prisma.user.create({
       data: {
         profileSlug: `${slugProfile}-${Date.now().toString(36)}`,
-        id: supabaseUser.user.id, // Store the Supabase UID
+        id: supabaseUser.user.id,
         email: data.email,
         name: formData.get("name") as string,
       },
