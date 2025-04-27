@@ -52,13 +52,20 @@ export const typeDefs = gql`
     hasNextPage: Boolean
   }
 
+  type PostResponse {
+    post: Post!
+    isOwnComment: Boolean!
+  }
   type Query {
     getPosts: [Post!]!
-    getSpecificPost(slug: String!): Post!
+    getSpecificPost(slug: String!): PostResponse!
     getUserInfo: User!
     getUserProfileThruSlug(profileSlug: String!): User!
   }
-
+  type DeleteResponse {
+    message: String!
+    isSuccess: Boolean!
+  }
   type Mutation {
     createPost(
       title: String!
@@ -66,5 +73,6 @@ export const typeDefs = gql`
       focusAreas: [FocusAreaInput!]!
     ): Post!
     createComment(content: String!, postId: Int!): Comment
+    deletePost(postId: Int!): DeleteResponse!
   }
 `;

@@ -1,7 +1,7 @@
 "use client";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { Posts } from "@/lib/types/types";
+import { PostResponse } from "@/lib/types/types";
 import { AsideRightHome } from "@/components/custom/main/aside-right-home";
 import { CommentForm } from "./comment-form";
 import { formatDistanceToNow } from "date-fns";
@@ -15,7 +15,7 @@ const Page = () => {
     data: post,
     isLoading,
     error: errorFound,
-  } = useQuery<Posts, Error>({
+  } = useQuery<PostResponse, Error>({
     queryKey: ["post", slug],
     queryFn: async () => {
       const response = await fetch("/api/graphql/", {
@@ -23,7 +23,8 @@ const Page = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           query: `query GetSpecificPost($slug: String!) {
-                getSpecificPost(slug: $slug) {
+              getSpecificPost(slug: $slug) {
+                post {
                   content
                   title
                   slug
@@ -47,9 +48,10 @@ const Page = () => {
                     profileSlug
                     role
                   }
-
                 }
-              }`,
+                isOwnComment
+              }
+            }`,
           variables: { slug: slug },
         }),
       });
@@ -62,6 +64,7 @@ const Page = () => {
       return result.data.getSpecificPost;
     },
   });
+
   console.log(post);
   if (isLoading) return <p>Loading...</p>;
   if (errorFound) return <p>Error loading post: 404 Post not found</p>;
@@ -72,10 +75,12 @@ const Page = () => {
         <section className="flex-grow p-6 rounded-2xl shadow-lg">
           <section className="flex justify-between items-center">
             {" "}
-            <h1 className="text-2xl font-bold mb-2">{post?.title} </h1>
-            {post?.user.profileSlug && (
+            <h1 className="text-2xl font-bold mb-2">{post?.post.title} </h1>
+            {post?.post.user.profileSlug && (
               <DropDownPost
-                authorLink={post.user.profileSlug}
+                postID={post.post.id}
+                isOwnComment={post.isOwnComment}
+                authorLink={post.post.user.profileSlug}
                 postSlug={slug}
               />
             )}{" "}
@@ -83,12 +88,14 @@ const Page = () => {
 
           <div className="text-gray-600 mb-4">
             <span>
-              by {post?.user.name} | Role: {post?.user.role}
+              by {post?.post.user.name} | Role: {post?.post.user.role}
             </span>
           </div>
-          <article className=" leading-relaxed mb-6">{post?.content}</article>
+          <article className=" leading-relaxed mb-6">
+            {post?.post.content}
+          </article>
           <div className="flex gap-2 mt-4">
-            {post?.focusAreas.map((area) => (
+            {post?.post.focusAreas.map((area) => (
               <span
                 key={area.name}
                 className="dark:bg-gray-300 dark:text-black px-2 py-1 rounded-md text-sm"
@@ -103,11 +110,11 @@ const Page = () => {
           <h2 className="text-xl font-semibold mb-4">Comments</h2>
           <div
             className={`no-scrollbar ${
-              post?.comments.length ? "border-b-4" : ""
+              post?.post.comments.length ? "border-b-4" : ""
             } space-y-4 h-[40vh] overflow-y-auto`}
           >
-            {post?.comments.length ? (
-              post.comments.map((comment, index) => {
+            {post?.post.comments.length ? (
+              post.post.comments.map((comment, index) => {
                 return (
                   <div key={index} className="border p-4 roundedalg shadow-sm">
                     <div className="mb-2 flex justify-between">
@@ -117,7 +124,7 @@ const Page = () => {
                       >
                         {comment.user.name}
                       </Link>
-                      <DropDownComment />
+                      <DropDownComment commentID="" isOwnComment={true} />
                     </div>
                     <p>{comment.content}</p>
                     <p className="text-sm text-gray-500 mt-1">
@@ -138,7 +145,7 @@ const Page = () => {
           </div>
         </section>
 
-        {post && <CommentForm id={Number(post.id)} slug={slug} />}
+        {post && <CommentForm id={Number(post.post.id)} slug={slug} />}
       </main>{" "}
       <AsideRightHome />
     </>

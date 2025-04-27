@@ -63,7 +63,9 @@ export const resolvers = {
               },
             },
             focusAreas: { select: { name: true, label: true } },
-            user: { select: { name: true, profileSlug: true, role: true } },
+            user: {
+              select: { name: true, profileSlug: true, role: true, id: true },
+            },
           },
         });
 
@@ -71,7 +73,7 @@ export const resolvers = {
           return null;
         }
 
-        return post;
+        return { post, isOwnComment: context.user?.id === post.user.id };
       } catch (err: unknown) {
         console.error("Error fetching specific post:", err);
         throw new GraphQLError("Failed to fetch post", {
@@ -89,7 +91,7 @@ export const resolvers = {
 
       try {
         const userProfile = await prisma.user.findUnique({
-          where: { id: context.user.id },
+          where: { id: context.user?.id },
           select: {
             name: true,
             email: true,
@@ -169,7 +171,7 @@ export const resolvers = {
       }
 
       const existingUser = await prisma.user.findUnique({
-        where: { id: context.user.id },
+        where: { id: context.user?.id },
       });
 
       if (!existingUser) {
@@ -191,7 +193,7 @@ export const resolvers = {
             title: args.title,
             content: args.content,
             slug: slugPost,
-            user: { connect: { id: context.user.id } },
+            user: { connect: { id: context.user?.id } },
             focusAreas: {
               connectOrCreate: args.focusAreas.map((focus) => ({
                 where: { name: focus.name },
@@ -226,7 +228,7 @@ export const resolvers = {
         const comment = await prisma.comment.create({
           data: {
             content: args.content,
-            user: { connect: { id: context.user.id } },
+            user: { connect: { id: context.user?.id } },
             post: { connect: { id: args.postId } },
           },
           include: { post: true },
@@ -237,6 +239,36 @@ export const resolvers = {
         console.error("Error creating comment:", err);
         throw new GraphQLError("Failed to create comment", {
           extensions: { code: "INTERNAL_SERVER_ERROR" },
+        });
+      }
+    },
+    deletePost: async (
+      _: unknown,
+      args: { postId: number },
+      context: Context
+    ) => {
+      if (!context.isAuthenticated) {
+        throw new GraphQLError("Not authenticated", {
+          extensions: { code: "UNAUTHENTICATED" },
+        });
+      }
+
+      try {
+        const post = await prisma.post.findUnique({
+          where: { id: args.postId },
+        });
+        if (!post) {
+          return { message: "Post not found", isSuccess: false };
+        }
+
+        await prisma.post.delete({
+          where: { id: args.postId },
+        });
+
+        return { message: "Post successfully deleted", isSuccess: true };
+      } catch (err: unknown) {
+        throw new GraphQLError("Internal Server Error", {
+          extensions: { code: "INTERNAL_SERVER_ERROR", http: { status: 500 } },
         });
       }
     },

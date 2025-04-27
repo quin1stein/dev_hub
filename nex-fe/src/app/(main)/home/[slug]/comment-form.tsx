@@ -13,7 +13,7 @@ export function CommentForm({ id, slug }: { id: number; slug: string }) {
     register,
     reset,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isLoading },
   } = useForm<Comment>();
 
   const mutation = useMutation({
@@ -77,6 +77,7 @@ export function CommentForm({ id, slug }: { id: number; slug: string }) {
 
   return (
     <main className="fixed bottom-0 left-[40%]">
+      {errors && <p>{errors.content?.message}</p>}
       <form onSubmit={handleSubmit(onSubmit)} className="space-x-2">
         <input
           className="p-2 border-black/20 bg-white dark:bg-black focus:border-black border-2 rounded-md"
@@ -89,9 +90,9 @@ export function CommentForm({ id, slug }: { id: number; slug: string }) {
         <button
           className="cursor-pointer p-2 rounded-md border-2 bg-black text-white"
           type="submit"
-          disabled={isSubmitting}
+          disabled={isLoading}
         >
-          {isSubmitting ? "Submitting" : "Submit"}
+          {isLoading ? "Submitting" : "Submit"}
         </button>
       </form>
     </main>
