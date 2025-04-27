@@ -4,12 +4,16 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { BsThreeDots } from "react-icons/bs";
-export const DropDownComment = () => {
+export const DropDownComment = ({
+  commentID,
+  isOwnComment,
+}: {
+  commentID: string;
+  isOwnComment: boolean;
+}) => {
   return (
     <>
       <DropdownMenu>
@@ -20,9 +24,21 @@ export const DropDownComment = () => {
         </DropdownMenuTrigger>
         <DropdownMenuContent side="left" align="start">
           <DropdownMenuGroup>
-            <DropdownMenuItem>Report Comment</DropdownMenuItem>
-            <DropdownMenuItem>Edit Comment</DropdownMenuItem>
-            <DropdownMenuItem>Delete Comment</DropdownMenuItem>
+            <DropdownMenuItem>
+              {isOwnComment || (
+                <Button variant={"secondary"}>Report Comment</Button>
+              )}
+            </DropdownMenuItem>
+            {isOwnComment && (
+              <>
+                <DropdownMenuItem>
+                  <Button variant={"secondary"}>Edit Comment</Button>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Button variant={"secondary"}>Delete Comment</Button>
+                </DropdownMenuItem>
+              </>
+            )}
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
