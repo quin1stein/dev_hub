@@ -1,3 +1,5 @@
+import { NextRequest } from "next/server";
+
 export interface SignupFormData {
   name: string;
   email: string;
@@ -66,7 +68,17 @@ enum Role {
   contributor,
   admin,
 }
-export interface Context {
-  user: { id: string; email: string; role: string };
+export type Context = {
+  req: NextRequest;
+  user: {
+    id: string;
+    email: string | undefined;
+    role: string | undefined;
+  } | null;
   isAuthenticated: boolean;
-}
+};
+
+export type PostResponse = {
+  post: Posts;
+  isOwnComment: boolean;
+};
