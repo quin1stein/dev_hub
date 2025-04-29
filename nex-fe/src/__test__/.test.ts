@@ -1,9 +1,27 @@
-function add(add: number, one: number): number {
-  return add + one;
-}
+import { graphql } from "graphql";
+import { typeDefs } from "../graphql/schema";
+import { makeExecutableSchema } from "@graphql-tools/schema";
+import { resolvers } from "../graphql/resolver";
+import { mockPrisma } from "../__test__/mocks/mock.ts";
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers,
+});
+test("Test", async () => {
+  const query = `
+    query {
+      getPosts {
+        id
+        title
+      }
+    }
+  `;
 
-describe("add two numbers", () => {
-  it("SHould ADD TWO NUMBERS", () => {
-    expect(add(1, 2)).toBe(3);
+  const result = await graphql({
+    schema,
+    source: query,
+    contextValue: { user: { id: "1" }, prisma: mockPrisma },
   });
+
+  expect(result.errors).toBeUndefined();
 });
