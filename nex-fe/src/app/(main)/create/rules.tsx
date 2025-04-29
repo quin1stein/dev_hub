@@ -1,4 +1,3 @@
-"use client";
 // this creates the rules in the /create
 
 const Rules = () => {

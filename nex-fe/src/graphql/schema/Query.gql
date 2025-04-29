@@ -1,0 +1,6 @@
+type Query {
+  getPosts: [Post!]!
+  getSpecificPost(slug: String!): PostResponse!
+  getUserInfo: User!
+  getUserProfileThruSlug(profileSlug: String!): User!
+}

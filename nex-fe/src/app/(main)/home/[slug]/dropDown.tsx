@@ -82,7 +82,12 @@ function DropDownPost({
       );
     },
     onSuccess: () => {
-      toast.success("Post successfully deleted");
+      toast.success("Post successfully deleted", {
+        action: {
+          label: "✖",
+          onClick: () => console.log("Closed"),
+        },
+      });
       route.push("/");
     },
   });
@@ -112,7 +117,6 @@ function DropDownPost({
               <>
                 <DropdownMenuItem>Edit Post</DropdownMenuItem>
                 <DropdownMenuItem onClick={() => deletePost(postID)}>
-                  <Button></Button>
                   Delete Post
                 </DropdownMenuItem>
               </>

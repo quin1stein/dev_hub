@@ -11,7 +11,7 @@ export const DropDownComment = ({
   commentID,
   isOwnComment,
 }: {
-  commentID: string;
+  commentID: number;
   isOwnComment: boolean;
 }) => {
   return (

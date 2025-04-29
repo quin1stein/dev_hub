@@ -124,7 +124,10 @@ const Page = () => {
                       >
                         {comment.user.name}
                       </Link>
-                      <DropDownComment commentID="" isOwnComment={true} />
+                      <DropDownComment
+                        commentID={post.post.id}
+                        isOwnComment={true}
+                      />
                     </div>
                     <p>{comment.content}</p>
                     <p className="text-sm text-gray-500 mt-1">

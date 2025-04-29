@@ -2,7 +2,7 @@
 import { ApolloServer } from "@apollo/server";
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import { typeDefs } from "@/graphql/schema";
-import { resolvers } from "@/graphql/resolver";
+import { resolvers } from "@/graphql/resolvers";
 import { NextRequest } from "next/server";
 import { createClient } from "@/utils/supabase/server";
 import { Context } from "@/lib/types/types";
@@ -30,7 +30,7 @@ const handler = startServerAndCreateNextHandler(server, {
     return {
       req,
       user: user
-        ? { id: user.id, email: user.email, role: fetchUser?.role }
+        ? { id: user.id, email: user.email, role: fetchUser?.role ?? undefined }
         : null,
       isAuthenticated: !!user,
     };

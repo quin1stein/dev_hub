@@ -1,0 +1,9 @@
+type Mutation {
+  createPost(
+    title: String!
+    content: String!
+    focusAreas: [FocusAreaInput!]!
+  ): Post!
+  createComment(content: String!, postId: Int!): Comment
+  deletePost(postId: Int!): DeleteResponse!
+}

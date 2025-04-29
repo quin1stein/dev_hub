@@ -60,7 +60,7 @@ export const HeroHome = () => {
   return (
     <main className="flex-grow h-[90vh] p-6">
       <section className="h-full overflow-y-auto space-y-6">
-        {posts ? (
+        {posts &&
           posts.map((post) => (
             <Link
               href={`/home/${post.slug}`}
@@ -100,10 +100,8 @@ export const HeroHome = () => {
                 </div>
               </div>
             </Link>
-          ))
-        ) : (
-          <p className="text-center text-gray-600">No posts available.</p>
-        )}
+          ))}
+        {!posts && <p className="text-center">No posts available.</p>}
       </section>
     </main>
   );

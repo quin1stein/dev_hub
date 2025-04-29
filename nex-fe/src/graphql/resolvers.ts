@@ -203,7 +203,6 @@ export const resolvers = {
           },
           include: { focusAreas: true },
         });
-
         return post;
       } catch (err: unknown) {
         console.error("Error creating post:", err);

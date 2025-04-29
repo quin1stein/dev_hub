@@ -1,5 +1,10 @@
 import { gql } from "graphql-tag";
+import { loadFilesSync } from "@graphql-tools/load-files";
+import { mergeTypeDefs } from "@graphql-tools/merge";
+import path from "path";
 
+// const typeArrays = loadFilesSync(path.join(__dirname, "./**/*.gql"));
+// const types = mergeTypeDefs(typeArrays);
 export const typeDefs = gql`
   enum UserRole {
     user

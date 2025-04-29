@@ -1,10 +1,12 @@
 "use client";
+import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
 export function CommentForm({ id, slug }: { id: number; slug: string }) {
+  const [isLoading, setisLoading] = useState<boolean>(false);
   type Comment = {
     content: string;
   };
@@ -13,11 +15,12 @@ export function CommentForm({ id, slug }: { id: number; slug: string }) {
     register,
     reset,
     handleSubmit,
-    formState: { errors, isLoading },
+    formState: { errors },
   } = useForm<Comment>();
 
   const mutation = useMutation({
     mutationFn: async (data: Comment) => {
+      setisLoading(true);
       const response = await fetch("/api/graphql/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -46,7 +49,7 @@ export function CommentForm({ id, slug }: { id: number; slug: string }) {
       if (result.errors) {
         throw new Error("GraphQL Error: " + result.errors[0]?.message);
       }
-
+      setisLoading(false);
       return result.data.createComment;
     },
     onSuccess: () => {
@@ -88,7 +91,9 @@ export function CommentForm({ id, slug }: { id: number; slug: string }) {
           placeholder="Enter a comment"
         />
         <button
-          className="cursor-pointer p-2 rounded-md border-2 bg-black text-white"
+          className={`cursor-pointer p-2 rounded-md border-2  ${
+            isLoading ? "bg-gray-500" : "bg-black text-white"
+          } `}
           type="submit"
           disabled={isLoading}
         >
