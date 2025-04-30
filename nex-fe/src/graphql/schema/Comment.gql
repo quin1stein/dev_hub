@@ -1,0 +1,8 @@
+type Comment {
+  id: ID!
+  content: String!
+  post: Post!
+  user: User!
+  createdAt: String!
+  updatedAt: String!
+}

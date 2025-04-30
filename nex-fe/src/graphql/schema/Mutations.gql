@@ -1,3 +1,19 @@
+type DeleteResponse {
+  message: String!
+  isSuccess: Boolean!
+}
+
+type FocusArea {
+  id: ID!
+  name: String!
+  label: String!
+}
+
+input FocusAreaInput {
+  name: String!
+  label: String!
+}
+
 type Mutation {
   createPost(
     title: String!

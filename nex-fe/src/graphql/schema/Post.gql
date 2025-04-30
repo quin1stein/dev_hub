@@ -8,3 +8,14 @@ type Post {
   user: User!
   comments: [Comment!]!
 }
+
+type PaginatedPost {
+  posts: [Post!]!
+  nextCursor: String
+  hasNextPage: Boolean
+}
+
+type PostResponse {
+  post: Post!
+  isOwnComment: Boolean!
+}
